@@ -50,15 +50,23 @@
     .cta {
       display: inline-block;
       padding: 15px 30px;
+      margin: 10px;
       border: 1px solid #facc15;
       color: #facc15;
       text-decoration: none;
       transition: 0.3s;
+      cursor: pointer;
+      background: transparent;
+      font-size: 1em;
     }
 
     .cta:hover {
       background: #facc15;
       color: black;
+    }
+
+    .buttons-container {
+      margin-bottom: 50px;
     }
 
     footer {
@@ -91,12 +99,15 @@
     </div>
 
     <div class="core">
-      Nous révélons <span class="highlight">l’âme du jeu</span>.<br>
-      Et nous créons des expériences qui favorisent <span class="highlight">l’expansion</span>.
+      Nous révélons <span class="highlight">l'âme du jeu</span>.<br>
+      Et nous créons des expériences qui favorisent <span class="highlight">l'expansion</span>.
     </div>
 
-    <!-- CTA -->
-    <a href="#" class="cta" onclick="enterGame()">Entrer dans le jeu</a>
+    <!-- BUTTONS -->
+    <div class="buttons-container">
+      <button class="cta" onclick="enterGame()">Entrer dans le jeu</button>
+      <a href="about.html" class="cta">En savoir plus</a>
+    </div>
 
     <p id="message" style="margin-top:30px;"></p>
 
