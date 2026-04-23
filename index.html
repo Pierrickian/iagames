@@ -96,8 +96,30 @@
     </div>
 
     <!-- CTA -->
-    <a href="#" class="cta">Entrer dans le jeu</a>
+   <a href="#" class="cta" onclick="enterGame()">Entrer dans le jeu</a>
 
+   <p id="message" style="margin-top:30px;"></p>
+
+   <script>
+    let clicks = 0;
+
+    function enterGame() {
+     clicks++;
+
+     const message = document.getElementById("message");
+
+     if (clicks === 2) {
+       message.innerText = "Tu reviens ? Reviens encore 4 fois.";
+     } 
+     else if (clicks > 2 && clicks < 7) {
+       message.innerText = "Encore...";
+     } 
+     else if (clicks === 7) {
+       const visitors = Math.floor(Math.random() * 1000) + 1;
+       message.innerText = "Tu as gagné. Tu es la " + visitors + "ème personne à faire le tour de la Terre pour te rendre compte que ce site est en construction. Merci pour ce vortex créé.";
+     }
+    }
+    </script>
     <!-- FOOTER -->
     <footer>
       © Intelligence Artistic Games
