@@ -2,141 +2,505 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Intelligence Artistic Games</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IAGames - Créez votre jeu vivant</title>
+  <meta name="description" content="IAGames transforme vos idées en jeux web jouables, évolutifs et partageables. Du vocal au prototype, puis du prototype au jeu vivant.">
   <style>
+    :root {
+      --night: #050512;
+      --deep: #0d1027;
+      --ink: #f8fafc;
+      --muted: #b8c1d9;
+      --gold: #ffd166;
+      --orange: #ff8a3d;
+      --pink: #ff4fa3;
+      --blue: #6ee7ff;
+      --green: #7cffb2;
+      --glass: rgba(255, 255, 255, 0.085);
+      --glass-strong: rgba(255, 255, 255, 0.15);
+      --line: rgba(255, 255, 255, 0.16);
+      --shadow: 0 30px 100px rgba(0, 0, 0, 0.42);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
     body {
       margin: 0;
-      font-family: 'Georgia', serif;
-      background: radial-gradient(circle at top, #0f172a, #020617);
-      color: #f1f5f9;
-      text-align: center;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 12%, rgba(255, 79, 163, 0.26), transparent 28%),
+        radial-gradient(circle at 82% 8%, rgba(110, 231, 255, 0.2), transparent 30%),
+        radial-gradient(circle at 62% 88%, rgba(255, 209, 102, 0.16), transparent 32%),
+        linear-gradient(145deg, #02030a 0%, var(--night) 42%, #101333 100%);
+      overflow-x: hidden;
     }
 
-    .container {
-      padding: 60px 20px;
-      max-width: 900px;
-      margin: auto;
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.22;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, black, transparent 80%);
     }
 
-    img.logo {
-      width: 180px;
-      margin-bottom: 30px;
+    a { color: inherit; }
+    .shell { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(5, 5, 18, 0.72);
+      backdrop-filter: blur(20px);
     }
+
+    nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      color: #070816;
+      background: conic-gradient(from 210deg, var(--gold), var(--pink), var(--blue), var(--gold));
+      box-shadow: 0 0 34px rgba(255, 79, 163, 0.35);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .nav-links a { text-decoration: none; }
+    .nav-links a:hover { color: var(--ink); }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 22px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--glass);
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 800;
+      transition: transform 0.2s ease, background 0.2s ease, border 0.2s ease;
+    }
+
+    .button:hover { transform: translateY(-2px); background: var(--glass-strong); border-color: rgba(255,255,255,0.34); }
+    .button.primary { border: 0; color: #090914; background: linear-gradient(135deg, var(--gold), var(--orange), var(--pink)); box-shadow: 0 18px 55px rgba(255, 79, 163, 0.28); }
+
+    .hero {
+      min-height: calc(100svh - 74px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.04fr) minmax(340px, 0.96fr);
+      align-items: center;
+      gap: 44px;
+      padding: 82px 0 62px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 20px;
+      padding: 9px 13px;
+      border: 1px solid rgba(110,231,255,0.28);
+      border-radius: 999px;
+      color: var(--blue);
+      background: rgba(110,231,255,0.08);
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .pulse {
+      width: 9px;
+      height: 9px;
+      border-radius: 99px;
+      background: var(--green);
+      box-shadow: 0 0 0 0 rgba(124,255,178,0.7);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse { 70% { box-shadow: 0 0 0 12px rgba(124,255,178,0); } 100% { box-shadow: 0 0 0 0 rgba(124,255,178,0); } }
+
+    h1, h2, h3, p { margin-top: 0; }
 
     h1 {
-      font-size: 2.8em;
-      margin-bottom: 10px;
-      letter-spacing: 2px;
+      max-width: 860px;
+      margin-bottom: 24px;
+      font-size: clamp(3.15rem, 8.5vw, 7.4rem);
+      line-height: 0.88;
+      letter-spacing: -0.09em;
     }
 
-    h2 {
-      font-weight: normal;
-      font-size: 1.2em;
-      color: #cbd5f5;
-      margin-bottom: 40px;
+    .gradient-text {
+      color: transparent;
+      background: linear-gradient(135deg, var(--gold), var(--pink), var(--blue));
+      -webkit-background-clip: text;
+      background-clip: text;
     }
 
-    .core {
-      font-size: 1.5em;
-      line-height: 1.6;
-      margin-bottom: 50px;
+    .lead {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: clamp(1.12rem, 2vw, 1.36rem);
+      line-height: 1.72;
     }
 
-    .highlight {
-      color: #facc15;
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin: 34px 0 26px; }
+
+    .proof-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.96rem;
     }
 
-    .cta {
-      display: inline-block;
-      padding: 15px 30px;
-      margin: 10px;
-      border: 1px solid #facc15;
-      color: #facc15;
-      text-decoration: none;
-      transition: 0.3s;
-      cursor: pointer;
-      background: transparent;
-      font-size: 1em;
+    .proof-row span {
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
     }
 
-    .cta:hover {
-      background: #facc15;
-      color: black;
+    .console {
+      position: relative;
+      min-height: 560px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 36px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+      box-shadow: var(--shadow);
+      overflow: hidden;
     }
 
-    .buttons-container {
-      margin-bottom: 50px;
+    .console::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: conic-gradient(from 120deg, transparent, rgba(255,79,163,0.24), transparent, rgba(110,231,255,0.2), transparent);
+      animation: rotate 12s linear infinite;
     }
 
-    footer {
-      margin-top: 80px;
-      font-size: 0.9em;
-      color: #64748b;
+    @keyframes rotate { to { transform: rotate(1turn); } }
+
+    .game-card {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      min-height: 510px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 28px;
+      background: rgba(4, 6, 18, 0.92);
+      backdrop-filter: blur(14px);
+    }
+
+    .game-top, .game-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      font-size: 0.88rem;
+    }
+
+    .game-bottom { border-top: 1px solid var(--line); border-bottom: 0; }
+
+    .dots { display: flex; gap: 7px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--pink); }
+    .dot:nth-child(2) { background: var(--gold); }
+    .dot:nth-child(3) { background: var(--blue); }
+
+    .arena {
+      position: relative;
+      min-height: 360px;
+      background:
+        radial-gradient(circle at center, rgba(255,255,255,0.08), transparent 38%),
+        linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+      background-size: auto, 34px 34px, 34px 34px;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: drop-shadow(0 0 18px currentColor);
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .orb.one { width: 92px; height: 92px; left: 12%; top: 16%; color: var(--gold); background: var(--gold); }
+    .orb.two { width: 62px; height: 62px; right: 14%; top: 28%; color: var(--pink); background: var(--pink); animation-delay: -1.6s; }
+    .orb.three { width: 42px; height: 42px; left: 48%; bottom: 18%; color: var(--blue); background: var(--blue); animation-delay: -2.4s; }
+    .orb.four { width: 28px; height: 28px; right: 35%; bottom: 34%; color: var(--green); background: var(--green); animation-delay: -3.1s; }
+
+    .laser {
+      position: absolute;
+      width: 160px;
+      height: 3px;
+      left: 31%;
+      top: 54%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, transparent, var(--blue), transparent);
+      transform: rotate(-24deg);
+      box-shadow: 0 0 18px var(--blue);
+    }
+
+    @keyframes float { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(18px,-18px,0); } }
+
+    .metric { padding: 12px 14px; border-radius: 18px; background: var(--glass); }
+    .metric strong { display: block; color: var(--ink); font-size: 1.04rem; margin-top: 2px; }
+
+    section { padding: 78px 0; }
+    .section-heading { max-width: 760px; margin-bottom: 34px; }
+    h2 { margin-bottom: 16px; font-size: clamp(2.15rem, 5vw, 4.25rem); line-height: 0.95; letter-spacing: -0.07em; }
+    .section-heading p { color: var(--muted); font-size: 1.1rem; line-height: 1.75; }
+
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+
+    .card {
+      min-height: 230px;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background: var(--glass);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    }
+
+    .card.large { min-height: 320px; }
+    .card h3 { margin-bottom: 12px; font-size: 1.35rem; letter-spacing: -0.03em; }
+    .card p, .card li { color: var(--muted); line-height: 1.7; }
+    .tag { display: inline-flex; margin-bottom: 18px; padding: 7px 10px; border-radius: 999px; color: var(--gold); background: rgba(255,209,102,0.11); font-weight: 800; font-size: 0.82rem; }
+
+    .manifesto {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .quote {
+      padding: 36px;
+      border-radius: 36px;
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(255,209,102,0.18), rgba(255,79,163,0.15), rgba(110,231,255,0.12));
+    }
+
+    .quote p { color: var(--ink); font-size: clamp(1.7rem, 3.5vw, 3rem); line-height: 1.08; letter-spacing: -0.06em; }
+
+    .steps { display: grid; gap: 14px; }
+    .step { display: grid; grid-template-columns: 58px 1fr; gap: 18px; padding: 23px; border: 1px solid var(--line); border-radius: 26px; background: var(--glass); }
+    .num { width: 50px; height: 50px; display: grid; place-items: center; border-radius: 17px; color: #090914; background: linear-gradient(135deg, var(--gold), var(--pink)); font-weight: 950; }
+
+    .offer {
+      position: relative;
+      overflow: hidden;
+      padding: 32px;
+      border-radius: 34px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
+    }
+
+    .price { margin: 18px 0; font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 950; letter-spacing: -0.07em; }
+    ul { margin: 0; padding-left: 20px; }
+
+    .cta-block {
+      text-align: center;
+      padding: 76px 24px;
+      border: 1px solid var(--line);
+      border-radius: 40px;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(110,231,255,0.2), transparent 28%),
+        radial-gradient(circle at 90% 20%, rgba(255,79,163,0.22), transparent 30%),
+        var(--glass);
+      box-shadow: var(--shadow);
+    }
+
+    .cta-block p { max-width: 680px; margin: 0 auto 28px; color: var(--muted); line-height: 1.75; font-size: 1.12rem; }
+
+    footer { padding: 46px 0; color: var(--muted); border-top: 1px solid var(--line); }
+    .footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 18px; }
+
+    @media (max-width: 920px) {
+      .hero, .manifesto, .grid-2 { grid-template-columns: 1fr; }
+      .grid-3 { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .console { min-height: auto; }
+    }
+
+    @media (max-width: 560px) {
+      .hero { padding-top: 58px; }
+      .game-bottom { align-items: stretch; flex-direction: column; }
+      .step { grid-template-columns: 1fr; }
+      .button { width: 100%; }
+      .hero-actions { width: 100%; }
     }
   </style>
 </head>
-
 <body>
+  <header>
+    <nav class="shell">
+      <a class="brand" href="#top" aria-label="IAGames accueil"><span class="brand-mark">IA</span><span>IAGames</span></a>
+      <div class="nav-links" aria-label="Navigation">
+        <a href="#vision">Vision</a>
+        <a href="#studio">Studio</a>
+        <a href="#process">Process</a>
+        <a href="#offres">Offres</a>
+      </div>
+      <a class="button" href="mailto:pikderas@gmail.com?subject=Projet%20IAGames">Parler d'un jeu</a>
+    </nav>
+  </header>
 
-  <div class="container">
+  <main id="top">
+    <section class="hero shell">
+      <div>
+        <div class="eyebrow"><span class="pulse"></span> games.iagames.fr - jeux web vivants</div>
+        <h1>Transformez une idée en <span class="gradient-text">jeu jouable</span>.</h1>
+        <p class="lead">IAGames crée des expériences web sur mesure : une idée racontée, une boucle de gameplay trouvée, un prototype mis en ligne, puis un jeu qui évolue avec vos envies.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="mailto:pikderas@gmail.com?subject=Je%20veux%20cr%C3%A9er%20mon%20jeu">Créer mon jeu</a>
+          <a class="button" href="#process">Voir la méthode</a>
+        </div>
+        <div class="proof-row">
+          <span>URL stable</span>
+          <span>Casual & arcade</span>
+          <span>Évolutions rapides</span>
+          <span>Gameplay d'abord</span>
+        </div>
+      </div>
 
-    <!-- LOGO -->
-    <img src="file_00000000eaa07243a630d92500d3d59a.png" class="logo" alt="logo">
+      <aside class="console" aria-label="Aperçu abstrait d'un jeu IAGames">
+        <div class="game-card">
+          <div class="game-top"><div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><span>live prototype</span></div>
+          <div class="arena">
+            <span class="orb one"></span><span class="orb two"></span><span class="orb three"></span><span class="orb four"></span><span class="laser"></span>
+          </div>
+          <div class="game-bottom">
+            <div class="metric">Brief vocal<strong>idée brute</strong></div>
+            <div class="metric">Prototype<strong>jouable</strong></div>
+            <div class="metric">Update<strong>évolution</strong></div>
+          </div>
+        </div>
+      </aside>
+    </section>
 
-    <!-- TITLE -->
-    <h1>Intelligence Artistic Games</h1>
+    <section id="vision" class="shell">
+      <div class="section-heading">
+        <h2>Une agence pour les jeux qui veulent grandir.</h2>
+        <p>La promesse n'est pas de produire un gros jeu figé. La promesse est de trouver vite ce qui donne envie de jouer, puis de faire évoluer l'expérience par touches successives.</p>
+      </div>
+      <div class="grid-3">
+        <article class="card"><span class="tag">01</span><h3>Les joueurs créent les règles</h3><p>On part de vos mots, de votre univers, de vos références, de vos sensations. Même une phrase suffit à démarrer.</p></article>
+        <article class="card"><span class="tag">02</span><h3>Les règles créent le jeu</h3><p>On cherche la règle juste : celle qui crée la tension, le rire, la surprise, le risque ou l'envie de recommencer.</p></article>
+        <article class="card"><span class="tag">03</span><h3>Le jeu crée un moment partagé</h3><p>Le jeu doit être accessible par lien, montrable vite, testable avec des proches, et assez vivant pour appeler une suite.</p></article>
+      </div>
+    </section>
 
-    <h2>
-      Jeux de société & jeux vidéo conscients
-    </h2>
+    <section id="studio" class="shell">
+      <div class="manifesto">
+        <div class="quote"><p>Du speech-to-app, mais avec une âme de game designer.</p></div>
+        <div class="grid-2">
+          <article class="card large"><h3>Pour particuliers créatifs</h3><p>Vous avez une idée de jeu, une blague, un défi familial, un concept étrange, une mécanique qui vous obsède. On en fait une première expérience jouable.</p></article>
+          <article class="card large"><h3>Pour projets qui cherchent leur gameplay</h3><p>On prototype avant de trop produire. Le code sert à éprouver le plaisir de jeu, pas à enfermer l'idée dans un cahier des charges trop tôt.</p></article>
+          <article class="card large"><h3>Pour jeux évolutifs</h3><p>Une arme, un boss, une balle, une règle, un niveau, une interface : chaque évolution peut devenir une nouvelle couche de plaisir.</p></article>
+          <article class="card large"><h3>Pour URL partageables</h3><p>Le jeu vit en ligne. Pas d'installation obligatoire, pas de friction inutile : on clique, on joue, on comprend, on ressent.</p></article>
+        </div>
+      </div>
+    </section>
 
-    <!-- CORE MESSAGE -->
-    <div class="core">
-      Les joueurs créent les règles.<br>
-      Les règles créent le jeu.<br>
-      Le jeu crée un moment partagé.
+    <section id="process" class="shell">
+      <div class="section-heading">
+        <h2>Une méthode courte, presque ludique.</h2>
+        <p>On garde l'élan. On transforme le flou en règles jouables, puis les retours en nouvelles versions.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="num">1</div><div><h3>Vous racontez</h3><p>Un vocal, un texte ou une intuition : le point de départ reste simple et vivant.</p></div></div>
+        <div class="step"><div class="num">2</div><div><h3>On extrait la boucle</h3><p>Objectif, action, contrainte, récompense, feedback. On trouve ce qui doit faire rejouer.</p></div></div>
+        <div class="step"><div class="num">3</div><div><h3>Le jeu arrive en ligne</h3><p>Une page web jouable, responsive, partageable, avec une direction claire.</p></div></div>
+        <div class="step"><div class="num">4</div><div><h3>On fait évoluer</h3><p>Les demandes deviennent des updates : gameplay, UI, niveaux, équilibrage, surprises.</p></div></div>
+      </div>
+    </section>
+
+    <section id="offres" class="shell">
+      <div class="section-heading">
+        <h2>Deux façons de commencer.</h2>
+        <p>La première version sert à donner corps au jeu. Les évolutions servent à le rendre vraiment bon.</p>
+      </div>
+      <div class="grid-2">
+        <article class="offer">
+          <span class="tag">Prototype</span>
+          <h3>Premier jeu jouable</h3>
+          <div class="price">Sur devis</div>
+          <ul>
+            <li>Clarification du concept</li>
+            <li>Boucle de gameplay centrale</li>
+            <li>Landing ou interface de jeu</li>
+            <li>URL web de test</li>
+          </ul>
+        </article>
+        <article class="offer">
+          <span class="tag">Évolution</span>
+          <h3>Jeu vivant accompagné</h3>
+          <div class="price">Sur devis</div>
+          <ul>
+            <li>Ajouts de features</li>
+            <li>Réglages et équilibrage</li>
+            <li>Amélioration UI et feedbacks</li>
+            <li>Construction progressive d'un vrai gameplay</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="shell">
+      <div class="cta-block">
+        <h2>Votre idée a peut-être déjà envie de jouer.</h2>
+        <p>Envoyez une phrase, une mécanique, une ambiance, un délire ou une frustration. On cherchera la règle qui fait naître le moment.</p>
+        <a class="button primary" href="mailto:pikderas@gmail.com?subject=Id%C3%A9e%20de%20jeu%20pour%20IAGames">Lancer une idée</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <span>© Intelligence Artistic Games</span>
+      <span>games.iagames.fr</span>
     </div>
-
-    <div class="core">
-      Nous révélons <span class="highlight">l'âme du jeu</span>.<br>
-      Et nous créons des expériences qui favorisent <span class="highlight">l'expansion</span>.
-    </div>
-
-    <!-- BUTTONS -->
-    <div class="buttons-container">
-      <button class="cta" onclick="enterGame()">Entrer dans le jeu</button>
-      <a href="about.html" class="cta">En savoir plus</a>
-    </div>
-
-    <p id="message" style="margin-top:30px;"></p>
-
-    <script>
-     let clicks = 0;
-
-     function enterGame() {
-      clicks++;
-
-      const message = document.getElementById("message");
-
-      if (clicks === 2) {
-        message.innerText = "Tu reviens ? Reviens encore 4 fois.";
-      } 
-      else if (clicks > 2 && clicks < 6) {
-        message.innerText = "Encore...";
-      } 
-      else if (clicks === 6) {
-        const visitors = Math.floor(Math.random() * 1000) + 1;
-        message.innerText = "Tu as gagné. Tu es la " + visitors + "ème personne à faire le tour de la Terre pour te rendre compte que ce site est en construction. Merci pour ce vortex créé.";
-      }
-     }
-    </script>
-    <!-- FOOTER -->
-    <footer>
-      © Intelligence Artistic Games
-    </footer>
-
-  </div>
-
+  </footer>
 </body>
 </html>
